@@ -85,15 +85,36 @@ public class Sticks {
                     /*
                      * Do pruning when fail to do current combination
                      */
-                    // when fail to search, res = 0 means curren longest stick can make wood, must
+                    // 1.when fail to search, res = 0 means curren longest stick can make wood, must
                     // fail to search later
                     if (res == 0) {
                         break;
                     }
-                    // can make wood, but rest of them cannot make wood
+                    // 2.can make wood, but rest of them cannot make wood
                     if (res + stick[next] == max) {
                         break;
                     }
+                    // 3.if this stick fail to match, that means stick with same length dont need
+                    // match anymore
+                    int more = next - 1;
+                    while (more >= 0 && stick[more] == stick[next]) { // already sorted
+                        more--;
+                    }
+                    next = more;
+                    // calculate rest length
+                    int restLen = 0;
+                    while (more >= 0) {
+                        if (used[more] == false) {
+                            restLen += stick[more];
+                        }
+                        more--;
+                    }
+                    // if rest total length < max - res(currLen), must fail
+                    if (restLen < max - res) {
+                        break;
+                    }
+                    // 4.think more prunning, if no more conditions
+                    continue;
 
                 }
             }
